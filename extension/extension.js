@@ -55,6 +55,20 @@ function fmtReset(secondsLeft) {
     return `${Math.max(minutes, 1)}m`;
 }
 
+function fmtExactReset(epochSec) {
+    if (!epochSec)
+        return '';
+    const date = new Date(epochSec * 1000);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    if (isToday)
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const diffDays = (epochSec - Date.now() / 1000) / 86400;
+    if (diffDays < 6)
+        return date.toLocaleDateString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
 function severityClass(severity) {
     if (severity === 'critical')
         return 'limitlens-critical';
@@ -311,8 +325,12 @@ class LimitLensIndicator extends PanelMenu.Button {
             row.fill.style_class =
                 `limitlens-bar-fill ${severityClass(limit.severity)}`;
 
-            const reset = limit.resets_at
-                ? `  ${fmtReset(limit.resets_at - now)}` : '';
+            let reset = '';
+            if (limit.resets_at) {
+                const exact = fmtExactReset(limit.resets_at);
+                const remaining = fmtReset(limit.resets_at - now);
+                reset = `  ${exact} (${remaining})`;
+            }
             row.right.text = `${Math.round(limit.percent)}%${reset}`;
         }
 

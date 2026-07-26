@@ -33,6 +33,19 @@ def fmt_reset(seconds_left):
     return '%dm' % max(minutes, 1)
 
 
+def fmt_exact_reset(epoch_sec):
+    """Unix epoch seconds -> exact local time string (e.g. '04:30' or 'Aug 03 01:00')."""
+    if not epoch_sec:
+        return ''
+    dt = datetime.datetime.fromtimestamp(epoch_sec).astimezone()
+    now = datetime.datetime.now().astimezone()
+    if dt.date() == now.date():
+        return dt.strftime('%H:%M')
+    if (dt - now).days < 6:
+        return dt.strftime('%a %H:%M')
+    return dt.strftime('%b %d %H:%M')
+
+
 def severity(percent):
     if percent >= 90:
         return 'critical'

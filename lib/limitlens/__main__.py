@@ -14,7 +14,7 @@ import sys
 import time
 
 from . import collect, hook
-from .util import fmt_reset
+from .util import fmt_exact_reset, fmt_reset
 
 BAR_WIDTH = 24
 
@@ -82,7 +82,9 @@ def render(stats, style):
 
             reset = ''
             if limit.get('resets_at'):
-                reset = 'resets in %s' % fmt_reset(limit['resets_at'] - now)
+                exact = fmt_exact_reset(limit['resets_at'])
+                remaining = fmt_reset(limit['resets_at'] - now)
+                reset = 'resets at %s (in %s)' % (exact, remaining)
             tag = style.dim(' (stale)') if limit.get('stale') else ''
 
             lines.append('    %-24s %s %5.1f%%  %s%s' % (
