@@ -104,11 +104,15 @@ class LimitLensIndicator extends PanelMenu.Button {
                 this._collect(false);
         });
 
-        this._readTimeout = GLib.timeout_add_seconds(
-            GLib.PRIORITY_DEFAULT, READ_INTERVAL_SEC, () => {
-                this._read();
-                return GLib.SOURCE_CONTINUE;
-            });
+        try {
+            GLib.mkdir_with_parents(DATA_DIR, 0o755);
+            const statsFile = Gio.File.new_for_path(STATS_FILE);
+            this._fileMonitor = statsFile.monitor_file(Gio.FileMonitorFlags.NONE, null);
+            this._fileMonitorSignal = this._fileMonitor.connect('changed', () => this._read(true));
+        } catch (e) {
+            console.warn(`limitlens: file monitor: ${e.message}`);
+        }
+
         this._collectTimeout = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT, COLLECT_INTERVAL_SEC, () => {
                 this._collect(false);
@@ -137,6 +141,9 @@ class LimitLensIndicator extends PanelMenu.Button {
                        Gio.SubprocessFlags.STDERR_PIPE,
             });
             launcher.set_cwd(LIB_DIR);
+            const env = GLib.get_environ();
+            env.push(`PYTHONPATH=${LIB_DIR}`);
+            launcher.set_environ(env);
             const proc = launcher.spawnv(argv);
             proc.communicate_utf8_async(null, null, (source, res) => {
                 this._collecting = false;
@@ -314,9 +321,11 @@ class LimitLensIndicator extends PanelMenu.Button {
     }
 
     destroy() {
-        if (this._readTimeout) {
-            GLib.source_remove(this._readTimeout);
-            this._readTimeout = null;
+        if (this._fileMonitor) {
+            if (this._fileMonitorSignal)
+                this._fileMonitor.disconnect(this._fileMonitorSignal);
+            this._fileMonitor.cancel();
+            this._fileMonitor = null;
         }
         if (this._collectTimeout) {
             GLib.source_remove(this._collectTimeout);

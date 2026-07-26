@@ -84,23 +84,27 @@ def _listening_ports():
     if not inodes:
         return []
 
+    proc_files = [
+        ('/proc/net/tcp', {'0100007F', '00000000'}),
+        ('/proc/net/tcp6', {'00000000000000000000000001000000', '00000000000000000000000000000000'}),
+    ]
     ports = []
-    try:
-        with open('/proc/net/tcp', 'r') as fh:
-            for line in fh.readlines()[1:]:
-                fields = line.split()
-                if len(fields) < 10 or fields[3] != '0A':  # 0A = LISTEN
-                    continue
-                if fields[9] not in inodes:
-                    continue
-                local = fields[1]
-                address, port = local.split(':')
-                # /proc/net/tcp stores the address little-endian: 0100007F = 127.0.0.1
-                if address.upper() != '0100007F':
-                    continue
-                ports.append(int(port, 16))
-    except OSError:
-        return []
+    for net_file, valid_addrs in proc_files:
+        try:
+            with open(net_file, 'r') as fh:
+                for line in fh.readlines()[1:]:
+                    fields = line.split()
+                    if len(fields) < 10 or fields[3] != '0A':  # 0A = LISTEN
+                        continue
+                    if fields[9] not in inodes:
+                        continue
+                    local = fields[1]
+                    address, port = local.split(':')
+                    if address.upper() not in valid_addrs:
+                        continue
+                    ports.append(int(port, 16))
+        except OSError:
+            continue
     return sorted(set(ports))
 
 

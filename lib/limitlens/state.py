@@ -24,14 +24,20 @@ def load_json(path, default):
 
 
 def save_json(path, obj):
-    """Write atomically — the extension reads stats.json on a timer."""
+    """Write atomically — the extension reads stats.json on file modification."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), suffix='.tmp')
     try:
         with os.fdopen(fd, 'w') as fh:
             json.dump(obj, fh, separators=(',', ':'))
+            fd = None  # fd is now owned and closed by the context manager
         os.replace(tmp, path)
     except BaseException:
+        if fd is not None:
+            try:
+                os.close(fd)
+            except OSError:
+                pass
         try:
             os.unlink(tmp)
         except OSError:
