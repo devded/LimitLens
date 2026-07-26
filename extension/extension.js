@@ -25,7 +25,9 @@ const BAR_WIDTH = 120;
 const DATA_DIR = GLib.build_filenamev([GLib.get_user_data_dir(), 'limitlens']);
 const STATS_FILE = GLib.build_filenamev([DATA_DIR, 'stats.json']);
 const LIB_DIR = GLib.build_filenamev([DATA_DIR, 'lib']);
-const PYTHON = '/usr/bin/python3';
+const PYTHON = GLib.find_program_in_path('python3') ||
+               GLib.find_program_in_path('python') ||
+               '/usr/bin/python3';
 
 // The glyph fills as the limit does, so the panel reads at a glance without
 // parsing the number.

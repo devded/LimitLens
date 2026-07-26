@@ -44,12 +44,15 @@ ANSI_OSC = re.compile(r'\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)')
 ANSI_MISC = re.compile(r'\x1b[()#][0-9A-Za-z]|\x1b[=>78]')
 BLOCKS = re.compile('[▀-▟─-╿]+')
 
-PERCENT = re.compile(r'(\d+(?:\.\d+)?)\s*%\s*used', re.IGNORECASE)
-RESETS = re.compile(r'Resets\s+([^\n]+)', re.IGNORECASE)
+PERCENT = re.compile(
+    r'(\d+(?:\.\d+)?)\s*%\s*(?:used|of\s+limit|\(used\))?|used:\s*(\d+(?:\.\d+)?)\s*%',
+    re.IGNORECASE,
+)
+RESETS = re.compile(r'Resets?(?:\s+(?:at|in|on))?[:\s]+([^\n]+)', re.IGNORECASE)
 
 WINDOWS = (
-    (re.compile(r'Current session', re.IGNORECASE), 'Session (5h)'),
-    (re.compile(r'Current week', re.IGNORECASE), 'Weekly'),
+    (re.compile(r'(?:Current\s+)?session|(?:5-?hour|5h)\s*(?:limit|window|usage)?', re.IGNORECASE), 'Session (5h)'),
+    (re.compile(r'(?:Current\s+)?week(?:ly)?\s*(?:\(all models\)|limit|window|usage)?', re.IGNORECASE), 'Weekly'),
 )
 
 
@@ -227,15 +230,18 @@ def parse(text, plan=None):
         if not match:
             continue
         tail = text[match.end():match.end() + 400]
-        percent = PERCENT.search(tail)
-        if not percent:
+        percent_match = PERCENT.search(tail)
+        if not percent_match:
+            continue
+        val = percent_match.group(1) or percent_match.group(2)
+        if not val:
             continue
         reset = RESETS.search(tail)
         rows.append({
             'provider': 'Claude',
             'plan': plan,
             'label': label,
-            'percent': float(percent.group(1)),
+            'percent': float(val),
             'resets_at': _parse_reset(reset.group(1)) if reset else None,
             'source': 'cli',
         })
