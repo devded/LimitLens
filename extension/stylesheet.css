@@ -11,24 +11,28 @@
     color: #e01b24;
 }
 
-/* Menu rows */
+/* Menu rows — a three-column grid: label | bar | value */
 .limitlens-row {
-    spacing: 12px;
+    spacing: 10px;
 }
 
 .limitlens-row-label {
-    min-width: 150px;
+    min-width: 180px;
+    max-width: 180px;
+    font-size: 0.95em;
 }
 
 .limitlens-row-value {
     font-feature-settings: "tnum";
     text-align: right;
-    min-width: 110px;
+    min-width: 200px;
+    font-size: 0.92em;
 }
 
 .limitlens-heading {
     font-weight: bold;
-    padding-top: 4px;
+    padding-top: 6px;
+    padding-bottom: 2px;
 }
 
 .limitlens-dim {
@@ -36,9 +40,11 @@
     font-size: 0.9em;
 }
 
-/* Usage bars */
+/* Usage bars — fixed-width track so all bars align regardless of label length */
 .limitlens-bar-track {
     width: 120px;
+    min-width: 120px;
+    max-width: 120px;
     height: 8px;
     background-color: rgba(255, 255, 255, 0.15);
     border-radius: 4px;
@@ -56,4 +62,3 @@
 .limitlens-bar-fill.limitlens-critical {
     background-color: #e01b24;
 }
-

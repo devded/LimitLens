@@ -329,7 +329,7 @@ class LimitLensIndicator extends PanelMenu.Button {
             if (limit.resets_at) {
                 const exact = fmtExactReset(limit.resets_at);
                 const remaining = fmtReset(limit.resets_at - now);
-                reset = `  ${exact} (${remaining})`;
+                reset = ` ${exact} (${remaining})`;
             }
             row.right.text = `${Math.round(limit.percent)}%${reset}`;
         }
