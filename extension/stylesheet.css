@@ -1,0 +1,59 @@
+/* Panel label: tabular numerals so the percentage doesn't jitter the panel. */
+.limitlens-label {
+    font-feature-settings: "tnum";
+}
+
+.limitlens-label.limitlens-warning {
+    color: #e5a50a;
+}
+
+.limitlens-label.limitlens-critical {
+    color: #e01b24;
+}
+
+/* Menu rows */
+.limitlens-row {
+    spacing: 12px;
+}
+
+.limitlens-row-label {
+    min-width: 150px;
+}
+
+.limitlens-row-value {
+    font-feature-settings: "tnum";
+    text-align: right;
+    min-width: 110px;
+}
+
+.limitlens-heading {
+    font-weight: bold;
+    padding-top: 4px;
+}
+
+.limitlens-dim {
+    opacity: 0.65;
+    font-size: 0.9em;
+}
+
+/* Usage bars */
+.limitlens-bar-track {
+    width: 120px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.limitlens-bar-fill {
+    border-radius: 4px;
+    background-color: #33d17a;
+}
+
+.limitlens-bar-fill.limitlens-warning {
+    background-color: #e5a50a;
+}
+
+.limitlens-bar-fill.limitlens-critical {
+    background-color: #e01b24;
+}
+

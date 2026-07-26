@@ -1,0 +1,8 @@
+{
+  "uuid": "limitlens@devded.pm.me",
+  "name": "LimitLens",
+  "description": "AI CLI usage limits in the top bar. Shows how much of your Claude Code session (5h) and weekly limits are used, and your Antigravity per-model quota, with reset countdowns \u2014 read live from each provider\u0027s own API. Inspired by the macOS app CodexBar.",
+  "shell-version": ["45", "46", "47", "48", "49", "50"],
+  "url": "https://github.com/devded/LimitLens"
+}
+
