@@ -41,20 +41,20 @@
     font-size: 0.9em;
 }
 
-/* Usage bars — the track is 120×18, children overlay via FixedLayout at (0,0). */
+/* Usage bars — the track is 120×14, children overlay via FixedLayout at (0,0). */
 .limitlens-bar-track {
     width: 120px;
     min-width: 120px;
     max-width: 120px;
-    height: 18px;
+    height: 14px;
     background-color: rgba(255, 255, 255, 0.12);
-    border-radius: 9px;
+    border-radius: 7px;
 }
 
 /* Fill bar — starts at the left edge, height matches the track. */
 .limitlens-bar-fill {
-    height: 18px;
-    border-radius: 9px;
+    height: 14px;
+    border-radius: 7px;
     background-color: #33d17a;
 }
 
@@ -69,9 +69,9 @@
 /* Percentage label — covers the full track area, text centered. */
 .limitlens-bar-label {
     width: 120px;
-    height: 18px;
+    height: 14px;
     text-align: center;
-    font-size: 0.78em;
+    font-size: 0.72em;
     font-weight: bold;
     font-feature-settings: "tnum";
     color: #ffffff;
