@@ -56,7 +56,7 @@ def fetch(cache, force=False):
     #    window has already reset were dropped by the reader, so anything left
     #    still describes a live window.
     rows, age = claude_statusline.read(plan)
-    if rows:
+    if rows and (not force or (age is not None and age <= 30)):
         if age is not None and age > HOOK_STALE_AFTER:
             for row in rows:
                 row['stale'] = True
