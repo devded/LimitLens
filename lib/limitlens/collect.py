@@ -41,6 +41,7 @@ def run(force=False):
         age = time.time() - cache.get('fetched_at', 0)
         for row in rows:
             row = dict(row)
+            row['percent'] = max(0.0, min(100.0, float(row['percent'])))
             row['severity'] = severity(row['percent'])
             row['as_of'] = int(cache.get('fetched_at', 0))
             # A provider may know better than the clock whether its reading is
