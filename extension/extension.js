@@ -284,15 +284,26 @@ class LimitLensIndicator extends PanelMenu.Button {
         });
         box.add_child(left);
 
-        const track = new St.BoxLayout({
+        const track = new St.Widget({
             style_class: 'limitlens-bar-track',
             y_align: Clutter.ActorAlign.CENTER,
+            layout_manager: new Clutter.BinLayout(),
         });
         const fill = new St.Widget({
             style_class: 'limitlens-bar-fill',
+            x_align: Clutter.ActorAlign.START,
+            y_expand: true,
+        });
+        const barLabel = new St.Label({
+            text: '',
+            style_class: 'limitlens-bar-label',
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER,
+            x_expand: true,
             y_expand: true,
         });
         track.add_child(fill);
+        track.add_child(barLabel);
         box.add_child(track);
 
         const right = new St.Label({
@@ -306,7 +317,7 @@ class LimitLensIndicator extends PanelMenu.Button {
 
         item.add_child(box);
         this._limitSection.addMenuItem(item);
-        return {item, left, fill, right};
+        return {item, left, fill, barLabel, right};
     }
 
     _refresh(stats) {
@@ -325,13 +336,15 @@ class LimitLensIndicator extends PanelMenu.Button {
             row.fill.style_class =
                 `limitlens-bar-fill ${severityClass(limit.severity)}`;
 
+            row.barLabel.text = `${Math.round(limit.percent)}%`;
+
             let reset = '';
             if (limit.resets_at) {
                 const exact = fmtExactReset(limit.resets_at);
                 const remaining = fmtReset(limit.resets_at - now);
-                reset = ` ${exact} (${remaining})`;
+                reset = `${exact} (${remaining})`;
             }
-            row.right.text = `${Math.round(limit.percent)}%${reset}`;
+            row.right.text = reset;
         }
 
         const warnings = stats.warnings || [];

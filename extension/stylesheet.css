@@ -11,7 +11,7 @@
     color: #e01b24;
 }
 
-/* Menu rows — a three-column grid: label | bar | value */
+/* Menu rows — a three-column grid: label | bar (with %) | reset time */
 .limitlens-row {
     spacing: 10px;
 }
@@ -25,8 +25,9 @@
 .limitlens-row-value {
     font-feature-settings: "tnum";
     text-align: right;
-    min-width: 200px;
-    font-size: 0.92em;
+    min-width: 160px;
+    font-size: 0.88em;
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .limitlens-heading {
@@ -40,18 +41,18 @@
     font-size: 0.9em;
 }
 
-/* Usage bars — fixed-width track so all bars align regardless of label length */
+/* Usage bars — percentage is overlaid inside the track */
 .limitlens-bar-track {
     width: 120px;
     min-width: 120px;
     max-width: 120px;
-    height: 8px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
+    height: 18px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
 }
 
 .limitlens-bar-fill {
-    border-radius: 4px;
+    border-radius: 9px;
     background-color: #33d17a;
 }
 
@@ -61,4 +62,13 @@
 
 .limitlens-bar-fill.limitlens-critical {
     background-color: #e01b24;
+}
+
+/* Percentage label centered inside the bar */
+.limitlens-bar-label {
+    font-size: 0.78em;
+    font-weight: bold;
+    font-feature-settings: "tnum";
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
