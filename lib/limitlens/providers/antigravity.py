@@ -39,7 +39,7 @@ RPC_PATH = ('/exa.language_server_pb.LanguageServerService/'
             'RetrieveUserQuotaSummary')
 STATUS_PATH = '/exa.language_server_pb.LanguageServerService/GetUserStatus'
 TIMEOUT = 4
-MIN_INTERVAL = 120
+MIN_INTERVAL = 110  # slightly under the extension's 120s collect timer to avoid harmonic skip
 
 
 def _agy_pids():
