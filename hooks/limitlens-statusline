@@ -1,0 +1,116 @@
+#!/usr/bin/python3 -S
+"""Claude Code status line hook — record the limits, print a line.
+
+Deliberately standalone and import-light.  Claude Code runs this on every
+status line render, in the path that draws its UI, so cost matters: importing
+the limitlens package cost ~34 ms of module loading for work that needs
+``json`` and ``os``.  ``-S`` skips site initialisation as well.  The result is
+about 20 ms, most of which is the interpreter starting at all.
+
+stdin is Claude Code's status line JSON.  The part worth keeping::
+
+    "rate_limits": {
+      "five_hour": {"used_percentage": 81, "resets_at": 1785115800},
+      "seven_day": {"used_percentage": 1,  "resets_at": 1785708000}
+    }
+
+Nothing here can fail loudly: a status line command that errors or hangs would
+degrade the CLI it is drawing for, so every step is guarded and the worst case
+is an empty line.
+"""
+
+import json
+import os
+import sys
+import time
+
+HOME = os.path.expanduser('~')
+CACHE = os.path.join(
+    os.environ.get('XDG_DATA_HOME') or os.path.join(HOME, '.local', 'share'),
+    'limitlens', 'claude-statusline.json')
+CONFIG = os.path.join(
+    os.environ.get('XDG_CONFIG_HOME') or os.path.join(HOME, '.config'),
+    'limitlens', 'config.json')
+
+
+
+def record(payload):
+    limits = payload.get('rate_limits')
+    if not isinstance(limits, dict):
+        return
+    directory = os.path.dirname(CACHE)
+    try:
+        os.makedirs(directory, exist_ok=True)
+    except OSError:
+        return
+    tmp = '%s.%d.tmp' % (CACHE, os.getpid())
+    try:
+        with open(tmp, 'w') as handle:
+            json.dump({
+                'written_at': int(time.time()),
+                'rate_limits': limits,
+                'plan': (payload.get('model') or {}).get('display_name'),
+            }, handle)
+        os.replace(tmp, CACHE)
+    except OSError:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+
+
+def delegate(raw):
+    """Run a status line command that was configured before us, if any."""
+    try:
+        with open(CONFIG) as handle:
+            command = (json.load(handle) or {}).get('statusline_delegate')
+    except (OSError, ValueError):
+        return None
+    if not command:
+        return None
+    import subprocess  # only when actually chaining
+    try:
+        done = subprocess.run(command, shell=True, input=raw, text=True,
+                              capture_output=True, timeout=5)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return done.stdout.rstrip('\n')
+
+
+def default_line(payload):
+    parts = []
+    model = (payload.get('model') or {}).get('display_name')
+    if model:
+        parts.append(model)
+    limits = payload.get('rate_limits') or {}
+    for key, label in (('five_hour', '5h'), ('seven_day', 'week')):
+        percent = (limits.get(key) or {}).get('used_percentage')
+        if percent is not None:
+            parts.append('%s %d%%' % (label, percent))
+    return ' · '.join(parts)
+
+
+def main():
+    try:
+        raw = sys.stdin.read()
+        payload = json.loads(raw)
+    except (ValueError, OSError):
+        return 0
+    if not isinstance(payload, dict):
+        return 0
+
+    record(payload)
+
+    line = delegate(raw)
+    if line is None:
+        line = default_line(payload)
+    if line:
+        sys.stdout.write(line + '\n')
+    return 0
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except Exception:
+        sys.exit(0)
