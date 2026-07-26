@@ -39,7 +39,7 @@ RPC_PATH = ('/exa.language_server_pb.LanguageServerService/'
             'RetrieveUserQuotaSummary')
 STATUS_PATH = '/exa.language_server_pb.LanguageServerService/GetUserStatus'
 TIMEOUT = 4
-MIN_INTERVAL = 30
+MIN_INTERVAL = 120
 
 
 def _agy_pids():
