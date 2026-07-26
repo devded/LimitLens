@@ -284,23 +284,19 @@ class LimitLensIndicator extends PanelMenu.Button {
         });
         box.add_child(left);
 
+        // The track uses the default FixedLayout: both children are placed at
+        // (0,0).  The fill paints the coloured bar from the left edge, and the
+        // label sits on top spanning the full track with CSS-centered text.
         const track = new St.Widget({
             style_class: 'limitlens-bar-track',
             y_align: Clutter.ActorAlign.CENTER,
-            layout_manager: new Clutter.BinLayout(),
         });
         const fill = new St.Widget({
             style_class: 'limitlens-bar-fill',
-            x_align: Clutter.ActorAlign.START,
-            y_expand: true,
         });
         const barLabel = new St.Label({
             text: '',
             style_class: 'limitlens-bar-label',
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.CENTER,
-            x_expand: true,
-            y_expand: true,
         });
         track.add_child(fill);
         track.add_child(barLabel);

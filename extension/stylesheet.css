@@ -11,7 +11,7 @@
     color: #e01b24;
 }
 
-/* Menu rows — a three-column grid: label | bar (with %) | reset time */
+/* Menu rows — three columns: label | bar (with %) | reset time */
 .limitlens-row {
     spacing: 10px;
 }
@@ -41,7 +41,7 @@
     font-size: 0.9em;
 }
 
-/* Usage bars — percentage is overlaid inside the track */
+/* Usage bars — the track is 120×18, children overlay via FixedLayout at (0,0). */
 .limitlens-bar-track {
     width: 120px;
     min-width: 120px;
@@ -51,7 +51,9 @@
     border-radius: 9px;
 }
 
+/* Fill bar — starts at the left edge, height matches the track. */
 .limitlens-bar-fill {
+    height: 18px;
     border-radius: 9px;
     background-color: #33d17a;
 }
@@ -64,8 +66,11 @@
     background-color: #e01b24;
 }
 
-/* Percentage label centered inside the bar */
+/* Percentage label — covers the full track area, text centered. */
 .limitlens-bar-label {
+    width: 120px;
+    height: 18px;
+    text-align: center;
     font-size: 0.78em;
     font-weight: bold;
     font-feature-settings: "tnum";
