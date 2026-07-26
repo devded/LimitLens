@@ -120,8 +120,14 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     if args.statusline:
-        from . import statusline
-        return statusline.main()
+        # Compatibility shim for a settings.json still pointing here.  The real
+        # hook is a standalone, import-light script: it runs inside Claude
+        # Code's render path, where this entry point's imports cost 4x more.
+        import shutil
+        hook_path = shutil.which('limitlens-statusline')
+        if hook_path:
+            os.execv(hook_path, [hook_path])
+        return 0
     if args.install_hook:
         return hook.install()
     if args.uninstall_hook:

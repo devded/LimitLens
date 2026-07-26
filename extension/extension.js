@@ -77,6 +77,7 @@ class LimitLensIndicator extends PanelMenu.Button {
         this._rows = [];
         this._collecting = false;
         this._lastCollect = 0;
+        this._lastMtime = 0;
 
         this._limitSection = new PopupMenu.PopupMenuSection();
         this.menu.addMenuItem(this._limitSection);
@@ -97,7 +98,7 @@ class LimitLensIndicator extends PanelMenu.Button {
         this.menu.connect('open-state-changed', (_menu, open) => {
             if (!open)
                 return;
-            this._read();
+            this._read(true);
             const now = GLib.get_monotonic_time() / 1e6;
             if (now - this._lastCollect > OPEN_COLLECT_MIN_SEC)
                 this._collect(false);
@@ -156,9 +157,18 @@ class LimitLensIndicator extends PanelMenu.Button {
 
     // ----- rendering -----
 
-    _read() {
+    _read(force = false) {
+        // Reset countdowns tick every read, but the file itself only changes
+        // when the collector runs — so skip the parse unless it actually did.
         let stats = null;
         try {
+            const info = Gio.File.new_for_path(STATS_FILE)
+                .query_info('time::modified', Gio.FileQueryInfoFlags.NONE, null);
+            const mtime = info.get_attribute_uint64('time::modified');
+            if (!force && mtime === this._lastMtime && !this.menu.isOpen)
+                return;
+            this._lastMtime = mtime;
+
             const [ok, bytes] = GLib.file_get_contents(STATS_FILE);
             if (ok)
                 stats = JSON.parse(new TextDecoder().decode(bytes));
@@ -168,6 +178,7 @@ class LimitLensIndicator extends PanelMenu.Button {
         if (!stats)
             return;
 
+        this._stats = stats;
         this._updatePanel(stats);
         if (this.menu.isOpen || !this._signature)
             this._updateMenu(stats);

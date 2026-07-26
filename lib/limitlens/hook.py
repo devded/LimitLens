@@ -30,12 +30,8 @@ def _resolved_command():
     return shutil.which(COMMAND) or COMMAND
 
 
-def _load(path, default):
-    return state_mod.load_json(path, default)
-
-
 def install():
-    settings = _load(SETTINGS, {}) or {}
+    settings = state_mod.load_json(SETTINGS, {}) or {}
     existing = settings.get('statusLine')
     command = _resolved_command()
 
@@ -52,7 +48,7 @@ def install():
             return 0
         # Chain rather than clobber: ours records the limits, then runs theirs
         # and prints its output verbatim.
-        config = _load(CONFIG_FILE, {}) or {}
+        config = state_mod.load_json(CONFIG_FILE, {}) or {}
         config['statusline_delegate'] = existing['command']
         os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
         state_mod.save_json(CONFIG_FILE, config)
@@ -76,13 +72,13 @@ def install():
 
 
 def uninstall():
-    settings = _load(SETTINGS, {}) or {}
+    settings = state_mod.load_json(SETTINGS, {}) or {}
     current = (settings.get('statusLine') or {}).get('command', '')
     if 'limitlens' not in current and 'tokencount' not in current:
         print('Not installed.')
         return 0
 
-    config = _load(CONFIG_FILE, {}) or {}
+    config = state_mod.load_json(CONFIG_FILE, {}) or {}
     delegate = config.pop('statusline_delegate', None)
     if delegate:
         settings['statusLine'] = {'type': 'command', 'command': delegate}

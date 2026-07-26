@@ -176,14 +176,18 @@ extension/          GNOME Shell extension (renders stats.json)
   extension.js
   metadata.json
   stylesheet.css
+hooks/
+  limitlens-statusline  the status line hook (standalone, import-light)
 lib/limitlens/      collector + CLI
   collect.py          one collection pass over all providers
+  hook.py             install/remove the status line hook
   state.py            cache + atomic stats.json write
   util.py             reset formatting, severity
   providers/
-    claude.py         plan lookup + orchestration
-    claude_cli.py     drives Claude Code's /usage panel over a pty
-    antigravity.py    agy language server RPC on loopback
+    claude.py             picks the cheapest available source
+    claude_statusline.py  reads what the hook recorded (free)
+    claude_cli.py         drives the /usage panel over a pty (fallback)
+    antigravity.py        agy language server RPC on loopback
 install.sh
 docs/
 ```

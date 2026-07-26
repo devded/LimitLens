@@ -23,9 +23,6 @@ WINDOWS = (
     ('seven_day', 'Weekly'),
 )
 
-# Beyond this the reading is still shown, but flagged stale in the UI.
-STALE_AFTER = 900
-
 
 def read(plan=None):
     """Return (rows, age_seconds) — rows is empty if there is nothing usable."""
@@ -59,7 +56,3 @@ def read(plan=None):
         })
 
     return rows, age
-
-
-def fresh(age, limit):
-    return age is not None and age <= limit

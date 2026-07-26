@@ -48,8 +48,8 @@ PERCENT = re.compile(r'(\d+(?:\.\d+)?)\s*%\s*used', re.IGNORECASE)
 RESETS = re.compile(r'Resets\s+([^\n]+)', re.IGNORECASE)
 
 WINDOWS = (
-    ('session', re.compile(r'Current session', re.IGNORECASE), 'Session (5h)'),
-    ('week', re.compile(r'Current week', re.IGNORECASE), 'Weekly'),
+    (re.compile(r'Current session', re.IGNORECASE), 'Session (5h)'),
+    (re.compile(r'Current week', re.IGNORECASE), 'Weekly'),
 )
 
 
@@ -222,7 +222,7 @@ def _parse_reset(text, now=None):
 def parse(text, plan=None):
     """Pull the limit rows out of the rendered panel."""
     rows = []
-    for _key, header, label in WINDOWS:
+    for header, label in WINDOWS:
         match = header.search(text)
         if not match:
             continue
