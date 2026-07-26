@@ -39,7 +39,7 @@ RPC_PATH = ('/exa.language_server_pb.LanguageServerService/'
             'RetrieveUserQuotaSummary')
 STATUS_PATH = '/exa.language_server_pb.LanguageServerService/GetUserStatus'
 TIMEOUT = 4
-MIN_INTERVAL = 120
+MIN_INTERVAL = 30
 
 
 def _agy_pids():
@@ -179,6 +179,12 @@ def fetch(cache, force=False):
         return cache.get('rows') or [], (
             'Antigravity: agy is not running (showing last reading)'
             if cache.get('rows') else 'Antigravity: agy is not running'), cache
+
+    # Try the last known working port first to avoid timeouts on non-HTTP ports
+    cached_port = cache.get('port')
+    if cached_port and cached_port in ports:
+        ports.remove(cached_port)
+        ports.insert(0, cached_port)
 
     last_error = None
     for port in ports:
