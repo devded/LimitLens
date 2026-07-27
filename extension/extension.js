@@ -329,6 +329,13 @@ class LimitLensIndicator extends PanelMenu.Button {
         }
     }
 
+function formatRowLabel(label) {
+    if (!label) return '';
+    return label
+        .replace(/ and /gi, ' & ')
+        .replace(/\bWeekly\b/gi, 'W');
+}
+
     _makeRow(label) {
         const item = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
@@ -337,7 +344,7 @@ class LimitLensIndicator extends PanelMenu.Button {
         const box = new St.BoxLayout({x_expand: true, style_class: 'limitlens-row'});
 
         const left = new St.Label({
-            text: label,
+            text: formatRowLabel(label),
             y_align: Clutter.ActorAlign.CENTER,
             style_class: 'limitlens-row-label',
         });

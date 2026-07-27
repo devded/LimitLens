@@ -1,6 +1,16 @@
 /* ==========================================================================
-   LimitLens - Modern Segmented Bar Chart Design System
+   LimitLens - Modern Segmented Bar Chart & Premium Typography
    ========================================================================== */
+
+/* Modern Font Family Stack */
+.limitlens-label,
+.limitlens-card-title,
+.limitlens-plan-badge,
+.limitlens-row-label,
+.limitlens-percent-tag,
+.limitlens-row-value {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", "Roboto", "Cantarell", sans-serif;
+}
 
 /* 1. Panel Indicator Button */
 .limitlens-label {
@@ -43,7 +53,7 @@
     font-size: 0.88em;
     font-weight: 800;
     color: #ffffff;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
     min-width: 100px;
 }
 
@@ -71,11 +81,12 @@
 }
 
 .limitlens-row-label {
-    min-width: 168px;
-    max-width: 168px;
-    font-size: 0.84em;
+    min-width: 140px;
+    max-width: 140px;
+    font-size: 0.86em;
     color: rgba(255, 255, 255, 0.92);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
 
 /* 4. Thin Segmented Vertical Line Bar Chart (10 Precision Lines) */
