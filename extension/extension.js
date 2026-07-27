@@ -32,6 +32,13 @@ function providerGlyph(name) {
     return '🤖';
 }
 
+function formatRowLabel(label) {
+    if (!label) return '';
+    return label
+        .replace(/ and /gi, ' & ')
+        .replace(/\bWeekly\b/gi, 'W');
+}
+
 function createProviderIconWidget(extPath, provider) {
     if (extPath && provider) {
         const lower = provider.toLowerCase();
@@ -328,13 +335,6 @@ class LimitLensIndicator extends PanelMenu.Button {
             this._rows.push(row);
         }
     }
-
-function formatRowLabel(label) {
-    if (!label) return '';
-    return label
-        .replace(/ and /gi, ' & ')
-        .replace(/\bWeekly\b/gi, 'W');
-}
 
     _makeRow(label) {
         const item = new PopupMenu.PopupBaseMenuItem({
