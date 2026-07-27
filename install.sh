@@ -37,8 +37,7 @@ echo "  hook       -> $BIN_DIR/limitlens-statusline"
 
 # 4. GNOME Shell extension.
 mkdir -p "$EXT_DIR"
-cp "$SRC/extension/extension.js" "$SRC/extension/metadata.json" \
-   "$SRC/extension/stylesheet.css" "$EXT_DIR/"
+cp -r "$SRC/extension/"* "$EXT_DIR/"
 echo "  extension  -> $EXT_DIR"
 
 # 5. Prime the cache so the panel has something to show immediately.

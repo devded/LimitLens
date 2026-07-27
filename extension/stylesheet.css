@@ -1,79 +1,148 @@
-/* Panel label: tabular numerals so the percentage doesn't jitter the panel. */
+/* ==========================================================================
+   LimitLens - Modern Segmented Bar Chart Design System
+   ========================================================================== */
+
+/* 1. Panel Indicator Button */
 .limitlens-label {
     font-feature-settings: "tnum";
+    font-weight: 700;
+    font-size: 0.9em;
+    vertical-align: middle;
+    padding: 2px 6px;
+    letter-spacing: 0.2px;
+}
+
+.limitlens-label.limitlens-normal {
+    color: #2ecc71;
 }
 
 .limitlens-label.limitlens-warning {
-    color: #e5a50a;
+    color: #f1c40f;
 }
 
 .limitlens-label.limitlens-critical {
-    color: #e01b24;
+    color: #e74c3c;
 }
 
-/* Menu rows — three columns: label | bar (with %) | reset time */
+/* 2. Provider Card Header */
+.limitlens-card-header {
+    spacing: 8px;
+    padding: 8px 12px 6px 12px;
+}
+
+.limitlens-card-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.limitlens-card-icon-fallback {
+    font-size: 1.1em;
+}
+
+.limitlens-card-title {
+    font-size: 0.88em;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    min-width: 100px;
+}
+
+.limitlens-plan-badge {
+    background-color: rgba(46, 204, 113, 0.18);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.30);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 0.68em;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* 3. Popup Menu Rows */
 .limitlens-row {
     spacing: 10px;
+    padding: 5px 8px;
+    font-size: 0.84em;
+    border-radius: 6px;
+}
+
+.limitlens-row:hover {
+    background-color: rgba(255, 255, 255, 0.07);
 }
 
 .limitlens-row-label {
-    min-width: 180px;
-    max-width: 180px;
-    font-size: 0.95em;
+    min-width: 168px;
+    max-width: 168px;
+    font-size: 0.84em;
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 500;
 }
 
+/* 4. Thin Segmented Vertical Line Bar Chart (10 Precision Lines) */
+.limitlens-barchart-box {
+    spacing: 7px;
+}
+
+.limitlens-seg-container {
+    spacing: 2px;
+}
+
+.limitlens-seg-bar {
+    width: 3px;
+    height: 14px;
+    border-radius: 1.5px;
+    background-color: rgba(255, 255, 255, 0.14);
+    transition-duration: 200ms;
+}
+
+/* Active Segment Column Colors */
+.limitlens-seg-bar.active-normal {
+    background-color: #2ecc71;
+}
+
+.limitlens-seg-bar.active-warning {
+    background-color: #f1c40f;
+}
+
+.limitlens-seg-bar.active-critical {
+    background-color: #e74c3c;
+}
+
+/* Percentage Pill Tag next to Bar Chart */
+.limitlens-percent-tag {
+    font-feature-settings: "tnum";
+    font-weight: 800;
+    font-size: 0.76em;
+    min-width: 38px;
+    text-align: right;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 5px;
+    padding: 1px 5px;
+}
+
+.limitlens-percent-tag.limitlens-warning {
+    color: #f1c40f;
+}
+
+.limitlens-percent-tag.limitlens-critical {
+    color: #e74c3c;
+}
+
+/* 5. Reset Time Pill Badge */
 .limitlens-row-value {
     font-feature-settings: "tnum";
     text-align: right;
-    min-width: 160px;
-    font-size: 0.88em;
+    font-size: 0.78em;
+    font-weight: 600;
     color: rgba(255, 255, 255, 0.75);
-}
-
-.limitlens-heading {
-    font-weight: bold;
-    padding-top: 6px;
-    padding-bottom: 2px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 2px 8px;
 }
 
 .limitlens-dim {
-    opacity: 0.65;
-    font-size: 0.9em;
-}
-
-/* Usage bars — the track is 120×14, children overlay via FixedLayout at (0,0). */
-.limitlens-bar-track {
-    width: 120px;
-    min-width: 120px;
-    max-width: 120px;
-    height: 14px;
-    background-color: rgba(255, 255, 255, 0.12);
-    border-radius: 7px;
-}
-
-/* Fill bar — starts at the left edge, height matches the track. */
-.limitlens-bar-fill {
-    height: 14px;
-    border-radius: 7px;
-    background-color: #33d17a;
-}
-
-.limitlens-bar-fill.limitlens-warning {
-    background-color: #e5a50a;
-}
-
-.limitlens-bar-fill.limitlens-critical {
-    background-color: #e01b24;
-}
-
-/* Percentage label — covers the full track area, text centered. */
-.limitlens-bar-label {
-    width: 120px;
-    height: 14px;
-    text-align: center;
-    font-size: 0.72em;
-    font-weight: bold;
-    font-feature-settings: "tnum";
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    opacity: 0.60;
+    font-size: 0.82em;
+    padding: 6px 12px;
 }
